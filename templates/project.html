@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="modal fade" id="enlargeImageModal" tabindex="-1" role="dialog" aria-labelledby="enlargeImageModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                    <img src="" class="enlargeImageModalSource" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 style="margin-left: 20px;margin-right: 20px">{{ projectinfo.name }}
+        <small> project</small>
+    </h1>
+    <h5 style="margin-left: 20px;margin-right: 20px">Tip: Click on any of the panels to expand it.</h5>
+    <div id="accordion" class="panel-group" style="margin-left: 50px;margin-right: 100px">
+        {% for d in projectinfo.folders %}
+            <div class="panel panel-default">
+                <a href="#{{ d.name }}" class="panel-title btn" data-toggle="collapse"
+                   data-parent="#accordion">{{ d.name }}</a>
+                <div id="{{ d.name }}" class="panel-collapse collapse container-fluid">
+                    {% for img in d.images %}
+                        <div class="col-sm-3">
+                            <h5 align="center"><b>{{ img.title }}</b></h5>
+                            <img src="{{ img.path }}" width="100%">
+                            {% if img.des %}
+                                <p>{{ img.des }}</p>
+                            {% else %}
+                                <p><br><br><br></p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        {% endfor %}
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(function () {
+            $('img').on('click', function () {
+                $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+                $('#enlargeImageModal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<style>
+    img {
+        cursor: zoom-in;
+    }
+</style>
+{% endblock %}
